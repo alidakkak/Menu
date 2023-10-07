@@ -29,17 +29,11 @@ class ProductController extends Controller
     public function store(StoreProductRequest $request)
     {
         $request->validated($request->all());
-        $category = Product::create([
-            'name' => $request->name,
-            'description' => $request->description,
-            'image' => $request->image,
-            'price' => $request->price,
-            'calories' => $request->calories,
-            'visibility' => $request->visibility,
-            'position' => $request->position,
-            'category_id' => $request->category_id
+        $product = Product::create($request->all());
+        $product->update([
+            'position' => $product->id
         ]);
-        return ProductResource::make($category);
+        return ProductResource::make($product);
     }
 
     public function update(UpdateProductRequest $request, Product $product)

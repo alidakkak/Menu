@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('image')->nullable();
             $table->string('price');
             $table->string('calories');
-            $table->integer('position');
+            $table->integer('position')->nullable();
             $table->boolean('visibility')->default(false);
             $table->foreignId('category_id')->references('id')->on('categories')->
                 onDelete('cascade');

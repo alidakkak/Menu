@@ -38,6 +38,10 @@ Route::get('/switchProduct/{product}', [\App\Http\Controllers\ProductController:
 
 
 Route::post('/visits', [\App\Http\Controllers\VisitController::class, 'store']);
+Route::post('/get', [\App\Http\Controllers\VisitController::class, 'get']);
+
+
+
 Route::get('/getByDay', [\App\Http\Controllers\VisitController::class, 'getByDay']);
 Route::get('/getByMonth', [\App\Http\Controllers\VisitController::class, 'getByMonth']);
 Route::get('/getByYear', [\App\Http\Controllers\VisitController::class, 'getByYear']);
