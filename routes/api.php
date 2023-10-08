@@ -41,9 +41,11 @@ Route::post('/visits', [\App\Http\Controllers\VisitController::class, 'store']);
 Route::post('/get', [\App\Http\Controllers\VisitController::class, 'get']);
 
 
+////// Feature
 
-Route::get('/getByDay', [\App\Http\Controllers\VisitController::class, 'getByDay']);
-Route::get('/getByMonth', [\App\Http\Controllers\VisitController::class, 'getByMonth']);
-Route::get('/getByYear', [\App\Http\Controllers\VisitController::class, 'getByYear']);
+
+Route::get('/features', [\App\Http\Controllers\FeatureController::class, 'index']);
+Route::post('/features', [\App\Http\Controllers\FeatureController::class, 'store']);
+Route::delete('/features/{feature}', [\App\Http\Controllers\FeatureController::class, 'destroy']);
 
 
