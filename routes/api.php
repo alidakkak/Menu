@@ -43,7 +43,8 @@ Route::group(['middleware' => 'jwt.auth'], function () {
     Route::get('/products/{product}', [\App\Http\Controllers\ProductController::class, 'show']);
     Route::delete('/products/{product}', [\App\Http\Controllers\ProductController::class, 'destroy']);
     Route::get('/switchProduct/{product}', [\App\Http\Controllers\ProductController::class, 'switchProduct']);
-    Route::get('/category/{categoryName}/products', [\App\Http\Controllers\ProductController::class, 'getProducts']);
+//    Route::get('/category/{categoryName}/products', [\App\Http\Controllers\ProductController::class, 'getProducts']);
+    Route::get('/category/{categoryName}/products', [\App\Http\Controllers\ProductController::class, 'getProduct']);
 
 
     Route::post('/visits', [\App\Http\Controllers\VisitController::class, 'store']);

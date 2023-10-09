@@ -62,15 +62,23 @@ class ProductController extends Controller
         return 'Updated SuccessFully';
     }
 
-    public function getProducts($categoryName)
+
+    public function getProduct($categoryName)
     {
         $category = Category::where('name', $categoryName)
             ->where('visibility', true)
             ->first();
+
         if (!$category) {
             return response()->json(['message' => 'Category not found'], 404);
         }
-        $products = $category->product;
+
+        $category->loadCount('product');
+
+        $products = $category->product->each(function ($product, $index) {
+            $product->update(['position' => $index + 1]);
+        });
+
         return response()->json($products);
     }
 

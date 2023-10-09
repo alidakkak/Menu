@@ -14,6 +14,7 @@ class ProductResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $this->load('category');
         return [
             'id' => $this->id,
             'name' => $this->name,
@@ -21,7 +22,8 @@ class ProductResource extends JsonResource
             'price' => $this->price,
             'calories' => $this->calories,
             'visibility' => $this->visibility,
-            'position' => $this->position
+            'position' => $this->position,
+            'category' => $this->category
 
         ];
     }
