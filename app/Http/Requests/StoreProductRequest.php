@@ -23,12 +23,12 @@ class StoreProductRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'image' => 'required|image|mimes:jpeg,png,jpg,svg|max:2048',
+            'image' => 'image|mimes:jpeg,png,jpg,svg|max:2048',
             'name' => 'required',
-            'description' => 'required',
+            //'description' => 'required',
             'category_id' => ['required' , Rule::exists('categories','id')],
             'price' => 'required',
-            'calories' => 'required',
+          //  'calories' => 'required',
         ];
     }
 }

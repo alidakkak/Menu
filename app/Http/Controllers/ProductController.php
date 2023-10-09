@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use App\Http\Resources\ProductResource;
+use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
@@ -60,5 +61,18 @@ class ProductController extends Controller
         ]);
         return 'Updated SuccessFully';
     }
+
+    public function getProducts($categoryName)
+    {
+        $category = Category::where('name', $categoryName)
+            ->where('visibility', true)
+            ->first();
+        if (!$category) {
+            return response()->json(['message' => 'Category not found'], 404);
+        }
+        $products = $category->product;
+        return response()->json($products);
+    }
+
 
 }
