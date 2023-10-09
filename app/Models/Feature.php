@@ -13,4 +13,8 @@ class Feature extends Model
     public function image() {
         return $this->hasMany(Image::class);
     }
+
+    public function category() {
+        return $this->belongsTo(Category::class);
+    }
 }

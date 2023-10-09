@@ -19,4 +19,8 @@ class Category extends Model
     public function product(){
         return $this->hasMany(Product::class)->orderBy('id');
     }
+
+    public function feature(){
+        return $this->hasMany(Feature::class)->orderBy('id');
+    }
 }

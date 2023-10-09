@@ -57,5 +57,6 @@ Route::group(['middleware' => 'jwt.auth'], function () {
     Route::get('/features', [\App\Http\Controllers\FeatureController::class, 'index']);
     Route::post('/features', [\App\Http\Controllers\FeatureController::class, 'store']);
     Route::delete('/features/{feature}', [\App\Http\Controllers\FeatureController::class, 'destroy']);
+    Route::get('/category/{categoryName}', [\App\Http\Controllers\FeatureController::class, 'getFeatureByCategory']);
 
 });
