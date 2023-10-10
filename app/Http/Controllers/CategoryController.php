@@ -12,9 +12,8 @@ class CategoryController extends Controller
 {
     public function index()
     {
-        $categories = Category::with('feature')->get();
+        $categories = Category::with('feature.image')->get();
         return $categories;
-        //return CategoryResource::collection($categories);
     }
 
     public function isVisible() {
@@ -41,7 +40,7 @@ class CategoryController extends Controller
 
     public function show(Category $category)
     {
-        return CategoryResource::make($category);
+        return $category->feature()->with('image')->get();
     }
 
     public function destroy(Category $category)
@@ -56,5 +55,12 @@ class CategoryController extends Controller
         ]);
         return 'Updated SuccessFully';
     }
+
+    public function numberOfCategory()
+    {
+        $number = Category::count();
+        return $number;
+    }
+
 
 }

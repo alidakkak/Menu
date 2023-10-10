@@ -25,24 +25,32 @@ Route::post('/register', [\App\Http\Controllers\AuthController::class, 'register
 Route::get('/categories', [\App\Http\Controllers\CategoryController::class, 'index']);
 Route::get('/is_Visible', [\App\Http\Controllers\CategoryController::class, 'isVisible']);
 Route::get('/categories/{category}', [\App\Http\Controllers\CategoryController::class, 'show']);
+Route::get('/numberOfCategory', [\App\Http\Controllers\CategoryController::class, 'numberOfCategory']);
 
 ///// SubCategory
 Route::get('/subCategories', [\App\Http\Controllers\SubCategoryController::class, 'index']);
 Route::get('/sub_is_Visible', [\App\Http\Controllers\SubCategoryController::class, 'isVisible']);
 Route::get('/subCategories/{subcategory}', [\App\Http\Controllers\SubCategoryController::class, 'show']);
+Route::get('/numberOfSubCategory', [\App\Http\Controllers\SubCategoryController::class, 'numberOfSubCategory']);
 
 /////  Product
 Route::get('/products', [\App\Http\Controllers\ProductController::class, 'index']);
 Route::get('/isVisible', [\App\Http\Controllers\ProductController::class, 'isVisible']);
 Route::get('/orderByPosition', [\App\Http\Controllers\ProductController::class, 'orderByPosition']);
 Route::get('/products/{product}', [\App\Http\Controllers\ProductController::class, 'show']);
+Route::get('/numberOfProduct', [\App\Http\Controllers\ProductController::class, 'numberOfProduct']);
 
 ////// Feature
 Route::get('/features', [\App\Http\Controllers\FeatureController::class, 'index']);
 Route::get('/category/{categoryName}', [\App\Http\Controllers\FeatureController::class, 'getFeatureByCategory']);
+Route::get('/numberOfFeature', [\App\Http\Controllers\FeatureController::class, 'numberOfFeature']);
+
+///// Public Feature
+Route::get('/publicfeatures', [\App\Http\Controllers\PublicFeatureController::class, 'index']);
+Route::get('/numberOfPublicFeature', [\App\Http\Controllers\PublicFeatureController::class, 'numberOfPublicFeature']);
 
 
-Route::group(['middleware' => 'jwt.auth'], function () {
+//Route::group(['middleware' => 'jwt.auth'], function () {
 
     Route::post('/logout', [\App\Http\Controllers\AuthController::class, 'logout']);
    // Route::get('/user-profile', [AuthController::class, 'userProfile']);
@@ -64,7 +72,7 @@ Route::group(['middleware' => 'jwt.auth'], function () {
     Route::delete('/products/{product}', [\App\Http\Controllers\ProductController::class, 'destroy']);
     Route::get('/switchProduct/{product}', [\App\Http\Controllers\ProductController::class, 'switchProduct']);
 //    Route::get('/category/{categoryName}/products', [\App\Http\Controllers\ProductController::class, 'getProducts']);
-    Route::get('/category/{categoryName}/products', [\App\Http\Controllers\ProductController::class, 'getProduct']);
+    Route::get('/category/{subcategoryName}/products', [\App\Http\Controllers\ProductController::class, 'getProduct']);
 
 
     Route::post('/visits', [\App\Http\Controllers\VisitController::class, 'store']);
@@ -76,4 +84,9 @@ Route::group(['middleware' => 'jwt.auth'], function () {
     Route::post('/features', [\App\Http\Controllers\FeatureController::class, 'store']);
     Route::delete('/features/{feature}', [\App\Http\Controllers\FeatureController::class, 'destroy']);
 
-});
+
+    ///// public Feature
+    Route::post('/publicfeatures', [\App\Http\Controllers\PublicFeatureController::class, 'store']);
+    Route::delete('/publicfeatures/{feature}', [\App\Http\Controllers\PublicFeatureController::class, 'destroy']);
+
+//});

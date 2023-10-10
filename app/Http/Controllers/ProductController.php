@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateProductRequest;
 use App\Http\Resources\ProductResource;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\SubCategory;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -63,24 +64,31 @@ class ProductController extends Controller
     }
 
 
-    public function getProduct($categoryName)
+    public function getProduct($subcategoryName)
     {
-        $category = Category::where('name', $categoryName)
+        $subCategory = SubCategory::where('name', $subcategoryName)
             ->where('visibility', true)
             ->first();
 
-        if (!$category) {
+        if (!$subCategory) {
             return response()->json(['message' => 'Category not found'], 404);
         }
 
-        $category->loadCount('product');
+        $subCategory->loadCount('product');
 
-        $products = $category->product->each(function ($product, $index) {
+        $products = $subCategory->product->each(function ($product, $index) {
             $product->update(['position' => $index + 1]);
         });
 
         return response()->json($products);
     }
+
+    public function numberOfProduct()
+    {
+        $number = Product::count();
+        return $number;
+    }
+
 
 
 }

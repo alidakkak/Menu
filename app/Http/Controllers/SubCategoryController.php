@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreSubCategoryRequest;
 use App\Http\Requests\UpdateSubCategoryRequest;
+use App\Http\Resources\SubCategoryResource;
 use App\Models\SubCategory;
 use Illuminate\Http\Request;
 
@@ -11,8 +12,8 @@ class SubCategoryController extends Controller
 {
     public function index()
     {
-        $subcategories = SubCategory::with('product',)->get();
-        return $subcategories;
+        $subcategories = SubCategory::with('product')->get();
+        return SubCategoryResource::collection($subcategories);
     }
     public function isVisible() {
         $subcategories = SubCategory::where('visibility' , true)->get();
@@ -52,4 +53,11 @@ class SubCategoryController extends Controller
         ]);
         return 'Updated SuccessFully';
     }
+
+    public function numberOfSubCategory()
+    {
+        $number = SubCategory::count();
+        return $number;
+    }
+
 }

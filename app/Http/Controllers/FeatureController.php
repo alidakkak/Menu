@@ -52,4 +52,11 @@ class FeatureController extends Controller
             'message' => 'Deleted Successfully From Our System',
         ], 201);
     }
+
+    public function numberOfFeature()
+    {
+        $number = Feature::count();
+        return $number;
+    }
+
 }

@@ -5,13 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Image extends Model
+class PublicImage extends Model
 {
     use HasFactory;
     protected $guarded = ['id'];
 
-    public function feature() {
-        return $this->belongsTo(Feature::class);
+    public function publicFeature() {
+        return $this->belongsTo(PublicFeature::class);
     }
 
     public function setImageAttribute ($image){

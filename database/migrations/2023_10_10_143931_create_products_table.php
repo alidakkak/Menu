@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('price');
             $table->string('calories')->nullable();
             $table->integer('position')->nullable();
-            $table->boolean('visibility')->default(false);
+            $table->boolean('visibility')->default(true);
             $table->foreignId('sub_category_id')->references('id')->on('sub_categories')
                 ->onDelete('cascade');
             $table->timestamps();
