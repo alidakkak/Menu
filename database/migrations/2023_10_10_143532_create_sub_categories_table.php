@@ -3,7 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Facades\DB;
+
 return new class extends Migration
 {
     /**
@@ -11,17 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('products', function (Blueprint $table) {
+        Schema::create('sub_categories', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('description')->nullable();
-            $table->string('image')->nullable();
-            $table->string('price');
-            $table->string('calories')->nullable();
-            $table->integer('position')->nullable();
+            $table->string('ar_name');
+            $table->string('position')->nullable();
             $table->boolean('visibility')->default(false);
-            $table->foreignId('category_id')->references('id')->on('categories')->
-                onDelete('cascade');
+            $table->foreignId('category_id')->references('id')
+                ->on('categories')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -31,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('products');
+        Schema::dropIfExists('sub_categories');
     }
 };

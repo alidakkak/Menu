@@ -14,10 +14,11 @@ class ProductResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $this->load('category');
+       // $this->load('category');
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'ar_name' => $this->ar_name,
             'image' => asset($this->image),
             'description' => $this->description,
             'category_id' => $this->category_id,
@@ -25,7 +26,7 @@ class ProductResource extends JsonResource
             'calories' => $this->calories,
             'visibility' => $this->visibility,
             'position' => $this->position,
-            'category' => $this->category
+           // 'category' => $this->category
 
         ];
     }

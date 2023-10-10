@@ -25,8 +25,8 @@ class FeatureController extends Controller
         if (!$category) {
             return response()->json(['message' => 'Category not found'], 404);
         }
-        $feature = $category->feature;
-        return response()->json($feature);
+        $features = $category->feature()->with('image')->get();
+        return response()->json($features);
     }
 
 

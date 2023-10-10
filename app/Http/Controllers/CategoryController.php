@@ -12,7 +12,7 @@ class CategoryController extends Controller
 {
     public function index()
     {
-        $categories = Category::with('product', 'feature')->get();
+        $categories = Category::with('feature')->get();
         return $categories;
         //return CategoryResource::collection($categories);
     }
@@ -26,6 +26,9 @@ class CategoryController extends Controller
     {
         $request->validated($request->all());
         $category = Category::create($request->all());
+        $category->update([
+            'position' => $category->id
+        ]);
         return CategoryResource::make($category);
     }
 

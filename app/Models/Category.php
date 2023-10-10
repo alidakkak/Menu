@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Category extends Model
 {
     use HasFactory;
+
     protected $guarded = ['id'];
 
     public function setImageAttribute($image){
@@ -16,11 +17,11 @@ class Category extends Model
         return $this->attributes['image'] =  '/'.'category_image'.'/' . $newImageName;
     }
 
-    public function product(){
-        return $this->hasMany(Product::class)->orderBy('id');
+    public function subCategory() {
+        return $this->hasMany(SubCategory::class);
     }
 
-    public function feature(){
-        return $this->hasMany(Feature::class)->orderBy('id');
+    public function feature() {
+        return $this->hasMany(Feature::class);
     }
 }

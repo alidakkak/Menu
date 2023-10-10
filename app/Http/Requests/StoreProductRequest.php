@@ -26,8 +26,9 @@ class StoreProductRequest extends FormRequest
             'image' => 'image|mimes:jpeg,png,jpg,svg|max:2048',
             'name' => 'required',
             //'description' => 'required',
-            'category_id' => ['required' , Rule::exists('categories','id')],
+            'sub_category_id' => ['required' , Rule::exists('sub_categories','id')],
             'price' => 'required',
+            'ar_name' => 'required|string',
           //  'calories' => 'required',
         ];
     }
