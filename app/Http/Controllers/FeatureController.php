@@ -14,7 +14,7 @@ class FeatureController extends Controller
     public function index()
     {
         $feature = Feature::all();
-        return $feature;
+        return FeatureResource::collection($feature);
 //        return FeatureResource::collection($feature);
     }
 

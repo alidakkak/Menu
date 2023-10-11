@@ -14,6 +14,13 @@ class FeatureResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        $this->load('Category');
+        return [
+            'id' => $this->id,
+            'title' => $this->title,
+            'image' => $this->image,
+            'category_id' => $this->category_id,
+            'Category' => $this->Category
+        ];
     }
 }
