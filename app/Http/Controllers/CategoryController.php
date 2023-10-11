@@ -6,13 +6,17 @@ use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
 use App\Http\Resources\CategoryResource;
 use App\Models\Category;
+use App\Models\Feature;
+use App\Models\Product;
+use App\Models\PublicFeature;
+use App\Models\SubCategory;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
     public function index()
     {
-        $categories = Category::with('feature.image')->get();
+        $categories = Category::with('feature.image','subcategory.product')->get();
         return $categories;
     }
 
@@ -40,7 +44,9 @@ class CategoryController extends Controller
 
     public function show(Category $category)
     {
-        return $category->feature()->with('image')->get();
+//        return $category->feature()->with('image')->get();
+        $all = $category->with('subCategory.product','feature')->orderBy('position')->get();
+        return $all;
     }
 
     public function destroy(Category $category)
@@ -56,10 +62,40 @@ class CategoryController extends Controller
         return 'Updated SuccessFully';
     }
 
-    public function numberOfCategory()
+    public function numberAll()
     {
-        $number = Category::count();
-        return $number;
+        $numberOfCategory = Category::count();
+        $numberOfSubCategory = SubCategory::count();
+        $numberOfProduct = Product::count();
+        $numberOfFeature = Feature::count();
+        $numberPublicFeature = PublicFeature::count();
+        return [
+            'NumberOfCategory' => $numberOfCategory,
+            'NumberOfSubCategory' => $numberOfSubCategory,
+            'NumberOfProduct' => $numberOfProduct,
+            'NumberOfFeature' => $numberOfFeature,
+            'NumberPublicFeature' => $numberPublicFeature
+        ];
+    }
+
+    public function getAllByCategory($categoryName)
+    {
+        $Category = Category::where('name', $categoryName)
+            ->where('visibility', true)
+            ->first();
+
+        if (!$Category) {
+            return response()->json(['message' => 'Category not found'], 404);
+        }
+
+        $Category->loadCount('subCategory');
+        $Category->loadCount('product');
+
+        $products = $Category->product->each(function ($product, $index) {
+            $product->update(['position' => $index + 1]);
+        });
+
+        return response()->json($products);
     }
 
 

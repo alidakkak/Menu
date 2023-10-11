@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('public_images', function (Blueprint $table) {
             $table->id();
-            $table->string('image')->nullable();
-            $table->foreignId('public_feature_id')->references('id')->on('public_features')
-                ->onDelete('cascade');
+//            $table->string('image')->nullable();
+//            $table->foreignId('public_feature_id')->references('id')->on('public_features')
+//                ->onDelete('cascade');
             $table->timestamps();
         });
     }

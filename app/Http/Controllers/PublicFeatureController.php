@@ -14,37 +14,35 @@ class PublicFeatureController extends Controller
 {
     public function index()
     {
-        $feature = PublicFeature::with('publicImage')->get();
+        $feature = PublicFeature::all();
         return $feature;
     }
+
+//    public function store(Request $request) {
+//       // $request->validated($request->all());
+//        $images = $request->image;
+//        $feature = PublicFeature::create($request->all());
+//        if ($request->hasFile('images')) {
+//            $images = $request->file('images');
+//            foreach ($images as $image) {
+//                PublicImage::create([
+//                    'public_feature_id' => $feature->id,
+//                    'image' => $image
+//                ]);
+//            }
+//        }
+//        return $feature;
+//    }
 
     public function store(Request $request) {
-       // $request->validated($request->all());
-        $images = $request->image;
         $feature = PublicFeature::create($request->all());
-        if ($request->hasFile('images')) {
-            $images = $request->file('images');
-            foreach ($images as $image) {
-                PublicImage::create([
-                    'public_feature_id' => $feature->id,
-                    'image' => $image
-                ]);
-            }
-        }
         return $feature;
     }
-
     public function destroy(PublicFeature $feature){
         $feature->delete();
         return response()->json([
             'message' => 'Deleted Successfully From Our System',
         ], 201);
-    }
-
-    public function numberOfPublicFeature()
-    {
-        $number = PublicFeature::count();
-        return $number;
     }
 
 }

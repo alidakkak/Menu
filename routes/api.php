@@ -25,29 +25,25 @@ Route::post('/register', [\App\Http\Controllers\AuthController::class, 'register
 Route::get('/categories', [\App\Http\Controllers\CategoryController::class, 'index']);
 Route::get('/is_Visible', [\App\Http\Controllers\CategoryController::class, 'isVisible']);
 Route::get('/categories/{category}', [\App\Http\Controllers\CategoryController::class, 'show']);
-Route::get('/numberOfCategory', [\App\Http\Controllers\CategoryController::class, 'numberOfCategory']);
+Route::get('/numberAll', [\App\Http\Controllers\CategoryController::class, 'numberAll']);
 
 ///// SubCategory
 Route::get('/subCategories', [\App\Http\Controllers\SubCategoryController::class, 'index']);
 Route::get('/sub_is_Visible', [\App\Http\Controllers\SubCategoryController::class, 'isVisible']);
 Route::get('/subCategories/{subcategory}', [\App\Http\Controllers\SubCategoryController::class, 'show']);
-Route::get('/numberOfSubCategory', [\App\Http\Controllers\SubCategoryController::class, 'numberOfSubCategory']);
 
 /////  Product
 Route::get('/products', [\App\Http\Controllers\ProductController::class, 'index']);
 Route::get('/isVisible', [\App\Http\Controllers\ProductController::class, 'isVisible']);
 Route::get('/orderByPosition', [\App\Http\Controllers\ProductController::class, 'orderByPosition']);
 Route::get('/products/{product}', [\App\Http\Controllers\ProductController::class, 'show']);
-Route::get('/numberOfProduct', [\App\Http\Controllers\ProductController::class, 'numberOfProduct']);
 
 ////// Feature
 Route::get('/features', [\App\Http\Controllers\FeatureController::class, 'index']);
 Route::get('/category/{categoryName}', [\App\Http\Controllers\FeatureController::class, 'getFeatureByCategory']);
-Route::get('/numberOfFeature', [\App\Http\Controllers\FeatureController::class, 'numberOfFeature']);
 
 ///// Public Feature
 Route::get('/publicfeatures', [\App\Http\Controllers\PublicFeatureController::class, 'index']);
-Route::get('/numberOfPublicFeature', [\App\Http\Controllers\PublicFeatureController::class, 'numberOfPublicFeature']);
 
 
 //Route::group(['middleware' => 'jwt.auth'], function () {

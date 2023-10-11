@@ -14,9 +14,9 @@ class Image extends Model
         return $this->belongsTo(Feature::class);
     }
 
-    public function setImageAttribute ($image){
-        $newImageName = uniqid() . '_' . 'feature_image' . '.' . $image->extension();
-        $image->move(public_path('feature_image') , $newImageName);
-        return $this->attributes['image'] =  '/'.'feature_image'.'/' . $newImageName;
-    }
+//    public function setImageAttribute ($image){
+//        $newImageName = uniqid() . '_' . 'feature_image' . '.' . $image->extension();
+//        $image->move(public_path('feature_image') , $newImageName);
+//        return $this->attributes['image'] =  '/'.'feature_image'.'/' . $newImageName;
+//    }
 }

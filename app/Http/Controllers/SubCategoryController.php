@@ -54,10 +54,5 @@ class SubCategoryController extends Controller
         return 'Updated SuccessFully';
     }
 
-    public function numberOfSubCategory()
-    {
-        $number = SubCategory::count();
-        return $number;
-    }
 
 }

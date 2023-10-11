@@ -16,4 +16,10 @@ class Feature extends Model
     public function image() {
         return $this->hasMany(Image::class);
     }
+
+    public function setImageAttribute ($image){
+        $newImageName = uniqid() . '_' . 'feature_image' . '.' . $image->extension();
+        $image->move(public_path('feature_image') , $newImageName);
+        return $this->attributes['image'] =  '/'.'feature_image'.'/' . $newImageName;
+    }
 }

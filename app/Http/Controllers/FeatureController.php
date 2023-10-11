@@ -13,7 +13,7 @@ class FeatureController extends Controller
 {
     public function index()
     {
-        $feature = Feature::with('image')->get();
+        $feature = Feature::all();
         return $feature;
 //        return FeatureResource::collection($feature);
     }
@@ -30,19 +30,25 @@ class FeatureController extends Controller
     }
 
 
+//    public function store(StroeFeatureRequest $request) {
+//        $request->validated($request->all());
+//        $images = $request->image;
+//        $feature = Feature::create($request->all());
+//        if ($request->hasFile('images')) {
+//            $images = $request->file('images');
+//            foreach ($images as $image) {
+//                Image::create([
+//                    'feature_id' => $feature->id,
+//                    'image' => $image
+//                ]);
+//            }
+//        }
+//        return FeatureResource::make($feature);
+//    }
+
     public function store(StroeFeatureRequest $request) {
         $request->validated($request->all());
-        $images = $request->image;
         $feature = Feature::create($request->all());
-        if ($request->hasFile('images')) {
-            $images = $request->file('images');
-            foreach ($images as $image) {
-                Image::create([
-                    'feature_id' => $feature->id,
-                    'image' => $image
-                ]);
-            }
-        }
         return FeatureResource::make($feature);
     }
 
@@ -51,12 +57,6 @@ class FeatureController extends Controller
         return response()->json([
             'message' => 'Deleted Successfully From Our System',
         ], 201);
-    }
-
-    public function numberOfFeature()
-    {
-        $number = Feature::count();
-        return $number;
     }
 
 }
