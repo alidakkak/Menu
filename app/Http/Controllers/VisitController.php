@@ -20,21 +20,21 @@ class VisitController extends Controller
 
         if ($state === 'day') {
             $date = $request->input('date1');
-            $visits = Visit::whereDate('created_at', $date)->get();
+            $visits = Visit::whereDate('created_at', $date)->count();
             return $visits;
         } else if ($state === 'month') {
             $date = $request->input('date1');
             $visits = Visit::whereMonth('created_at', $date)
-                ->get();
+                ->count();
             return $visits;
         } else if ($state === 'year') {
             $date = $request->input('date1');
-            $visits = Visit::whereYear('created_at', $date)->get();
+            $visits = Visit::whereYear('created_at', $date)->count();
             return $visits;
         } else if ($state === 'between') {
             $date1 = $request->input('date1');
             $date2 = $request->input('date2');
-            $visits = Visit::whereBetween('created_at', [$date1, $date2])->get();
+            $visits = Visit::whereBetween('created_at', [$date1, $date2])->count();
             return $visits;
         } else {
             return response([
