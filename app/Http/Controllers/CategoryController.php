@@ -16,7 +16,7 @@ class CategoryController extends Controller
 {
     public function index()
     {
-        $categories = Category::with('feature.image','subcategory.product')->get();
+        $categories = Category::with('feature','subcategory.product')->get();
         return $categories;
     }
 
