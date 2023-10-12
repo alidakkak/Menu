@@ -23,9 +23,10 @@ class VisitController extends Controller
             $visits = Visit::whereDate('created_at', $date)->count();
             return $visits;
         } else if ($state === 'month') {
-            $date = $request->input('date1');
-            $visits = Visit::whereMonth('created_at', $date)
-                ->count();
+            $date = Carbon::parse($request->input('date1'));
+            $visits = Visit::whereYear('created_at', $date->year)
+            ->whereMonth('created_at', $date->month)
+            ->count();
             return $visits;
         } else if ($state === 'year') {
             $date = $request->input('date1');
