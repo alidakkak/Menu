@@ -14,12 +14,12 @@ class ProductController extends Controller
 {
     public function index()
     {
-        $products = Product::all();
+        $products = Product::orderBy('position')->get();
         return ProductResource::collection($products);
     }
 
     public function isVisible() {
-        $product = Product::where('visibility' , true)->get();
+        $product = Product::where('visibility' , true)->orderBy('position')->get();
         return ProductResource::collection($product);
     }
     public function orderByPosition() {
@@ -31,18 +31,145 @@ class ProductController extends Controller
     public function store(StoreProductRequest $request)
     {
         $request->validated($request->all());
-        $product = Product::create($request->all());
-        $product->update([
-            'position' => $product->id
-        ]);
-        return ProductResource::make($product);
+        $maxPositionInCategory = Product::where('sub_category_id' , $request->sub_category_id)->max('position');
+        if (!$maxPositionInCategory){
+            $product = Product::create(array_merge($request->all() , ['position' => 1]));
+            return ProductResource::make($product);
+        }
+        if (!$request->position) {
+            $product = Product::create(array_merge($request->all() , ['position' => $maxPositionInCategory + 1]));
+            return ProductResource::make($product);
+        }else {
+            if ($request->position == $maxPositionInCategory + 1){
+                $product = Product::create($request->all());
+                return ProductResource::make($product);
+            }
+
+            if ($request->position > $maxPositionInCategory + 1){
+                $product = Product::create(array_merge($request->all() , ['position' => $maxPositionInCategory + 1]));
+                return ProductResource::make($product);
+            }
+
+            if ($request->position == $maxPositionInCategory){
+                $maxProduct = Product::where('position' , $maxPositionInCategory)->first();
+                $product = Product::create(array_merge($request->all() , ['position' => $maxPositionInCategory]));
+                $maxProduct->update([
+                    'position' => $maxPositionInCategory + 1
+                ]);
+                return ProductResource::make($product);
+            }
+
+            if ($request->position < $maxPositionInCategory){
+                $shouldShiftProducts = Product::where('position' , '>=' , $request->position)->get();
+                foreach ($shouldShiftProducts as $shouldShiftProduct){
+                    $shouldShiftProduct->update([
+                        'position' => $shouldShiftProduct['position'] + 1
+                    ]);
+                }
+                $product = Product::create($request->all());
+                return ProductResource::make($product);
+            }
+        }
     }
 
     public function update(UpdateProductRequest $request, Product $product)
     {
         $request->validated($request->all());
-        $product->update($request->all());
-        return ProductResource::make($product);
+        $maxPositionInCategory = Product::where('sub_category_id' , $product->sub_category_id)->max('position');
+        if (!$request->position) { // checked
+            $product->update($request->all());
+            return ProductResource::make($product);
+        }
+        else {
+            if ($request->position == $product->position){ // checked
+                $product->update($request->all());
+                return ProductResource::make($product);
+            }
+            else if ($request->position >= $maxPositionInCategory + 1) { // checked
+                $productsShouldShift = Product::where('position' , '>' ,$product->position)->get();
+                foreach ($productsShouldShift as $productShould) {
+                    $productShould->update([
+                       'position' => $productShould['position'] - 1
+                    ]);
+                }
+                $product->update(array_merge($request->except('position') , ['position' => $maxPositionInCategory]));
+                return ProductResource::make($product);
+            }
+            else if ($request->position == $maxPositionInCategory){ //checked
+
+                $productsShouldShift = Product::where('position' , '>' ,$product->position)->get();
+                foreach ($productsShouldShift as $productShould) {
+                    $productShould->update([
+                        'position' => $productShould['position'] - 1
+                    ]);
+                }
+                $product->update($request->all());
+                return ProductResource::make($product);
+            }
+
+            else if ($request->position < $maxPositionInCategory){
+
+                if ($request->position < $product->position){
+                    if ($request->position == $product->position - 1){
+                        $productShouldReplace = Product::where('position' , $request->position)->first();
+                        $productShouldReplace->update([
+                            'position' => $product->position
+                        ]);
+                        $product->update([
+                           'position' => $request->position
+                        ]);
+                        return ProductResource::make($product);
+                    }
+                    else { //checked
+                        $productsShouldShift = Product::whereBetween('position', [$request->position, $product->position - 1])->get();
+                        foreach ($productsShouldShift as $productShouldShift) {
+                            $productShouldShift->update([
+                                'position' => $productShouldShift['position'] + 1
+                            ]);
+                        }
+                        $product->update([
+                            'position' => $request->position
+                        ]);
+                        return ProductResource::make($product);
+                    }
+                }
+                else {
+                    if ($request->position == $product->position + 1){ //checked
+                        $productShouldReplace = Product::where('position' , $request->position)->first();
+                        $productShouldReplace->update([
+                            'position' => $product->position
+                        ]);
+                        $product->update([
+                            'position' => $request->position
+                        ]);
+                        return ProductResource::make($product);
+                    }
+                    else{
+                        $indexToMove = $request->position;
+                        $indexMoved = $product->position;
+                        $productsShouldShift = Product::where('position' , '>=' ,  $indexToMove)->get();
+
+                        foreach ($productsShouldShift as $poductShould) {
+                            $poductShould->update([
+                               'position' => $poductShould['position'] + 1
+                            ]);
+                        }
+                        $product->update([
+                           'position' => $request->position
+                        ]);
+
+                        $productsShouldGoBackShift = Product::where('position' , '>' , $indexMoved)->get();
+
+                        foreach ($productsShouldGoBackShift as $productShouldGoBackShift){
+                            $productShouldGoBackShift->update([
+                               'position' => $productShouldGoBackShift['position'] - 1
+                            ]);
+                        }
+                        return ProductResource::make($product);
+                    }
+                }
+            }
+        }
     }
 
     public function show(Product $product)
@@ -52,6 +179,12 @@ class ProductController extends Controller
 
     public function destroy(Product $product)
     {
+        $shouldShiftProducts = Product::where('position' , '>' , $product->position)->get();
+        foreach ($shouldShiftProducts as $shouldShiftProduct){
+            $shouldShiftProduct->update([
+                'position' => $shouldShiftProduct['position'] - 1
+            ]);
+        }
         $product->delete();
         return 'One Product Deleted Successfully';
     }
