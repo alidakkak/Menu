@@ -40,7 +40,7 @@ class ProductController extends Controller
             $product = Product::create(array_merge($request->all() , ['position' => $maxPositionInCategory + 1]));
             return ProductResource::make($product);
         }else {
-            if ($request->position == $maxPositionInCategory + 1){
+            if ($request->position == $maxPositionInCategory + 1) {
                 $product = Product::create($request->all());
                 return ProductResource::make($product);
             }

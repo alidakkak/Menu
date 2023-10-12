@@ -21,8 +21,8 @@ class CategoryController extends Controller
     }
 
     public function isVisible() {
-        $category = Category::where('visibility' , true)->get();
-        return CategoryResource::collection($category);
+        $category = Category::with('feature','subcategory.product')->where('visibility' , true)->get();
+        return $category;
     }
 
     public function store(StoreCategoryRequest $request)
@@ -44,10 +44,23 @@ class CategoryController extends Controller
 
     public function show(Category $category)
     {
-//        return $category->feature()->with('image')->get();
         $all = $category->with('subCategory.product','feature')->orderBy('position')->get();
         return $all;
     }
+
+    public function showsome(Category $category)
+    {
+        $all = $category->with(['subCategory' => function ($query) {
+            $query->where('visibility', true);
+        }, 'subCategory.product' => function ($query) {
+            $query->where('visibility', true);
+        }, 'feature'])->where('visibility', true)->get();
+
+        return $all;
+    }
+
+
+
 
     public function destroy(Category $category)
     {
