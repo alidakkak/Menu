@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('ar_name');
             $table->string('position')->nullable();
-            $table->boolean('visibility')->default(true);
+            $table->boolean('visibility')->default(false);
             $table->foreignId('category_id')->references('id')
                 ->on('categories')->onDelete('cascade');
             $table->timestamps();

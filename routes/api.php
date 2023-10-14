@@ -25,7 +25,7 @@ Route::post('/register', [\App\Http\Controllers\AuthController::class, 'register
 Route::get('/categories', [\App\Http\Controllers\CategoryController::class, 'index']);
 Route::get('/is_Visible', [\App\Http\Controllers\CategoryController::class, 'isVisible']);
 Route::get('/categories/{category}', [\App\Http\Controllers\CategoryController::class, 'show']);
-Route::get('/categoriesSome/{category}', [\App\Http\Controllers\CategoryController::class, 'showsome']);
+Route::get('/categoriesSome/{categoryID}', [\App\Http\Controllers\CategoryController::class, 'showsome']);
 Route::get('/numberAll', [\App\Http\Controllers\CategoryController::class, 'numberAll']);
 
 ///// SubCategory

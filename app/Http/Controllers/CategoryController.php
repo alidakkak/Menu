@@ -44,20 +44,26 @@ class CategoryController extends Controller
 
     public function show(Category $category)
     {
-        $all = $category->with('subCategory.product','feature')->orderBy('position')->get();
+        $all = $category::with('subCategory.product', 'feature')->orderBy('position')->find($category->id);
         return $all;
     }
 
-    public function showsome(Category $category)
+
+    public function showsome(Category $categoryID)
     {
-        $all = $category->with(['subCategory' => function ($query) {
-            $query->where('visibility', true);
-        }, 'subCategory.product' => function ($query) {
-            $query->where('visibility', true);
-        }, 'feature'])->where('visibility', true)->get();
+        $category = $categoryID->with([
+            'subCategory' => function ($query) {
+                $query->where('visibility', true)->orderBy('position');
+            },
+            'subCategory.product' => function ($query) {
+                $query->where('visibility', true)->orderBy('position');
+            },
+            'feature'
+        ])->where('visibility', true)->orderBy('position')->find($categoryID->id);
 
-        return $all;
+        return $category;
     }
+
 
 
 

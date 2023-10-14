@@ -16,11 +16,12 @@ return new class extends Migration
             $table->string('name');
             $table->string('ar_name');
             $table->string('description')->nullable();
+            $table->string('description_arabic')->nullable();
             $table->string('image')->nullable();
             $table->string('price');
             $table->string('calories')->nullable();
             $table->integer('position')->nullable();
-            $table->boolean('visibility')->default(true);
+            $table->boolean('visibility')->default(false);
             $table->foreignId('sub_category_id')->references('id')->on('sub_categories')
                 ->onDelete('cascade');
             $table->timestamps();
