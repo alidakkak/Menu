@@ -47,7 +47,7 @@ Route::get('/category/{categoryName}', [\App\Http\Controllers\FeatureController:
 Route::get('/publicfeatures', [\App\Http\Controllers\PublicFeatureController::class, 'index']);
 
 
-//Route::group(['middleware' => 'jwt.auth'], function () {
+Route::group(['middleware' => 'jwt.auth'], function () {
 
     Route::post('/logout', [\App\Http\Controllers\AuthController::class, 'logout']);
    // Route::get('/user-profile', [AuthController::class, 'userProfile']);
@@ -86,4 +86,4 @@ Route::get('/publicfeatures', [\App\Http\Controllers\PublicFeatureController::cl
     Route::post('/publicfeatures', [\App\Http\Controllers\PublicFeatureController::class, 'store']);
     Route::delete('/publicfeatures/{feature}', [\App\Http\Controllers\PublicFeatureController::class, 'destroy']);
 
-//});
+});
