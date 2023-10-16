@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+Route::post('/visits', [\App\Http\Controllers\VisitController::class, 'store']);
 
 Route::post('/login', [\App\Http\Controllers\AuthController::class, 'login']);
 Route::post('/register', [\App\Http\Controllers\AuthController::class, 'register']);
@@ -72,7 +73,6 @@ Route::group(['middleware' => 'jwt.auth'], function () {
     Route::get('/category/{subcategoryName}/products', [\App\Http\Controllers\ProductController::class, 'getProduct']);
 
 
-    Route::post('/visits', [\App\Http\Controllers\VisitController::class, 'store']);
     Route::post('/get', [\App\Http\Controllers\VisitController::class, 'get']);
 
 
