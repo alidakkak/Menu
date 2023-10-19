@@ -30,7 +30,8 @@ class SubCategoryController extends Controller
             if (!$request->position) {
                 $product = SubCategory::create(array_merge($request->all(), ['position' => $maxPositionInCategory + 1]));
                 return SubCategoryResource::make($product);
-            } else {
+            }
+            else {
                 if ($request->position == $maxPositionInCategory + 1) {
                     $product = SubCategory::create($request->all());
                     return SubCategoryResource::make($product);
@@ -42,7 +43,7 @@ class SubCategoryController extends Controller
                 }
 
                 if ($request->position == $maxPositionInCategory) {
-                    $maxProduct = SubCategory::where('position', $maxPositionInCategory)->first();
+                    $maxProduct = SubCategory::where('category_id' , $request->category_id)->where('position', $maxPositionInCategory)->first();
                     $product = SubCategory::create(array_merge($request->all(), ['position' => $maxPositionInCategory]));
                     $maxProduct->update([
                         'position' => $maxPositionInCategory + 1
@@ -51,7 +52,8 @@ class SubCategoryController extends Controller
                 }
 
                 if ($request->position < $maxPositionInCategory) {
-                    $shouldShiftProducts = SubCategory::where('position', '>=', $request->position)->get();
+                    $shouldShiftProducts = SubCategory::where('category_id' , $request->category_id)->where('position', '>=', $request->position)
+                        ->get();
                     foreach ($shouldShiftProducts as $shouldShiftProduct) {
                         $shouldShiftProduct->update([
                             'position' => $shouldShiftProduct['position'] + 1
@@ -77,7 +79,7 @@ class SubCategoryController extends Controller
                 return SubCategoryResource::make($subcategory);
             }
             else if ($request->position >= $maxPositionInCategory + 1) { // checked
-                $productsShouldShift = SubCategory::where('position' , '>' ,$subcategory->position)->get();
+                $productsShouldShift = SubCategory::where('category_id' , $subcategory->category_id)->where('position' , '>' ,$subcategory->position)->get();
                 foreach ($productsShouldShift as $productShould) {
                     $productShould->update([
                         'position' => $productShould['position'] - 1
@@ -88,7 +90,7 @@ class SubCategoryController extends Controller
             }
             else if ($request->position == $maxPositionInCategory){ //checked
 
-                $productsShouldShift = SubCategory::where('position' , '>' ,$subcategory->position)->get();
+                $productsShouldShift = SubCategory::where('category_id' , $subcategory->category_id)->where('position' , '>' ,$subcategory->position)->get();
                 foreach ($productsShouldShift as $productShould) {
                     $productShould->update([
                         'position' => $productShould['position'] - 1
@@ -102,7 +104,7 @@ class SubCategoryController extends Controller
 
                 if ($request->position < $subcategory->position){
                     if ($request->position == $subcategory->position - 1){
-                        $productShouldReplace = SubCategory::where('position' , $request->position)->first();
+                        $productShouldReplace = SubCategory::where('category_id' , $subcategory->category_id)->where('position' , $request->position)->first();
                         $productShouldReplace->update([
                             'position' => $subcategory->position
                         ]);
@@ -112,7 +114,7 @@ class SubCategoryController extends Controller
                         return SubCategoryResource::make($subcategory);
                     }
                     else { //checked
-                        $productsShouldShift = SubCategory::whereBetween('position', [$request->position, $subcategory->position - 1])->get();
+                        $productsShouldShift = SubCategory::where('category_id' , $subcategory->category_id)->whereBetween('position', [$request->position, $subcategory->position - 1])->get();
                         foreach ($productsShouldShift as $productShouldShift) {
                             $productShouldShift->update([
                                 'position' => $productShouldShift['position'] + 1
@@ -126,7 +128,7 @@ class SubCategoryController extends Controller
                 }
                 else {
                     if ($request->position == $subcategory->position + 1){ //checked
-                        $productShouldReplace = SubCategory::where('position' , $request->position)->first();
+                        $productShouldReplace = SubCategory::where('category_id' , $subcategory->category_id)->where('position' , $request->position)->first();
                         $productShouldReplace->update([
                             'position' => $subcategory->position
                         ]);
@@ -138,7 +140,7 @@ class SubCategoryController extends Controller
                     else{
                         $indexToMove = $request->position;
                         $indexMoved = $subcategory->position;
-                        $productsShouldShift = SubCategory::where('position' , '>=' ,  $indexToMove)->get();
+                        $productsShouldShift = SubCategory::where('category_id' , $subcategory->category_id)->where('position' , '>=' ,  $indexToMove)->get();
 
                         foreach ($productsShouldShift as $poductShould) {
                             $poductShould->update([
@@ -149,7 +151,7 @@ class SubCategoryController extends Controller
                             'position' => $request->position
                         ]);
 
-                        $productsShouldGoBackShift = SubCategory::where('position' , '>' , $indexMoved)->get();
+                        $productsShouldGoBackShift = SubCategory::where('category_id' , $subcategory->category_id)->where('position' , '>' , $indexMoved)->get();
 
                         foreach ($productsShouldGoBackShift as $productShouldGoBackShift){
                             $productShouldGoBackShift->update([
@@ -170,7 +172,7 @@ class SubCategoryController extends Controller
 
     public function destroy(SubCategory $subcategory)
     {
-        $shouldShiftSubCategory = SubCategory::where('position' , '>' , $subcategory->position)->get();
+        $shouldShiftSubCategory = SubCategory::where('category_id' , $subcategory->category_id)->where('position' , '>' , $subcategory->position)->get();
         foreach ($shouldShiftSubCategory as $shouldShiftSubCategor){
             $shouldShiftSubCategor->update([
                 'position' => $shouldShiftSubCategor['position'] - 1
